@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
-        uses: docker/build-push-action@v3 ##this action builds the image locally, then pushes it to the specified repo
+        uses: docker/build-push-action@v3 ##thiss action builds the image locally, then pushes it to the specified repo
         with:
           file: Dockerfile
           context: .
