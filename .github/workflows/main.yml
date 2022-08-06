@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  docker-build: ##name of the job
+    runs-on: ubuntu-latest ##os which the runner will use
+    steps: ## job steps
+      - name: Checkout
+        uses: actions/checkout@v3 ##this action clones current repo to the runner
+      - name: Set up QEMU ##used to provide emulated environments for builiding on architecture other than the host arch
+        uses: docker/setup-qemu-action@v2
+      - name: Login to Dockerhub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v3 ##this action builds the image locally, then pushes it to the specified repo
+        with:
+          file: Dockerfile
+          context: .
+          push: true
+          tags: bernaa77/craftech-task05:${{ github.sha }}
+  
+  docker-run: ##second job
+    needs:  [ docker-build ] ##job only runs if 'docker-build' runs before
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker runner
+      - run: docker run bernaa77/craftech-task05:${{ github.sha }}
