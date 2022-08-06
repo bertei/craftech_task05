@@ -29,6 +29,6 @@ jobs:
   docker-run: ##second job
     needs:  [ docker-build ] ##job only runs if 'docker-build' runs before
     runs-on: ubuntu-latest
+    name: Docker run
     steps:
-      - name: Docker runner
       - run: docker run bernaa77/craftech-task05:${{ github.sha }}
